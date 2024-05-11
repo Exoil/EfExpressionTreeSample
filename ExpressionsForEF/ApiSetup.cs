@@ -35,7 +35,7 @@ public static class ApiSetup
                 var andExpression = expressionBuilder.Build();
                 
                 var test = context.Users.FirstOrDefault(
-                    ExpressionHelper<User>.ToLambdaExpression(expression.Expression, expression.Parameter));
+                    ExpressionHelper<User>.ToLambdaExpression(expression.Expression));
 
                 return Results.Ok(test);
             }
