@@ -4,8 +4,17 @@ using ExpressionsForEF.ExpressionHelper.Enums;
 
 namespace ExpressionsForEF.ExpressionHelper;
 
-public static class SingeExpression<T>
+public static class ExpressionHelper<T>
 {
+    public static Expression<Func<T, bool>> ToLambdaExpression(
+        Expression expression,
+        ParameterExpression parameterExpression)
+        => Expression.Lambda<Func<T, bool>>(expression, parameterExpression);
+    
+    public static Expression<Func<T, bool>> ToLambdaExpression(
+        Expression expression,
+        IEnumerable<ParameterExpression> parameterExpression)
+        => Expression.Lambda<Func<T, bool>>(expression, parameterExpression);
     public static ExpressionData GetBinaryExpression<I>(
         string parameterName,
         BinaryOperator binaryOperator,
