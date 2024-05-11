@@ -1,6 +1,7 @@
 namespace ExpressionsForEF.ExpressionHelper.Enums;
 
-public class CollectionOperator
+public enum CollectionOperator
 {
-    
+    In = 1,
+    NotIn = 2
 }

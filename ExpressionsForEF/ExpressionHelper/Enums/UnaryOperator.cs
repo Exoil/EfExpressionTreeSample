@@ -1,6 +1,7 @@
 namespace ExpressionsForEF.ExpressionHelper.Enums;
 
-public class UnaryOperator
+public enum UnaryOperator
 {
-    
+    Empty,
+    NotEmpy
 }
