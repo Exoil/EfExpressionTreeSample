@@ -7,14 +7,16 @@ namespace ExpressionsForEF.ExpressionHelper;
 public static class ExpressionHelper<T>
 {
     public static Expression<Func<T, bool>> ToLambdaExpression(
-        Expression expression,
-        ParameterExpression parameterExpression)
-        => Expression.Lambda<Func<T, bool>>(expression, parameterExpression);
+        Expression expression)
+        => Expression.Lambda<Func<T, bool>>(expression);
     
     public static Expression<Func<T, bool>> ToLambdaExpression(
-        Expression expression,
-        IEnumerable<ParameterExpression> parameterExpression)
-        => Expression.Lambda<Func<T, bool>>(expression, parameterExpression);
+        ExpressionData expression)
+        => Expression.Lambda<Func<T, bool>>(expression.Expression, expression.Parameter);
+    
+    public static Expression<Func<T, bool>> ToLambdaExpression(
+        ComplexExpressionData expression)
+        => Expression.Lambda<Func<T, bool>>(expression.Expression, expression.Parameters);
 
     public static ExpressionData GetBinaryExpression<I>(
         string parameterName,
