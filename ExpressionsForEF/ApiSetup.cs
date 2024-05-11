@@ -18,15 +18,15 @@ public static class ApiSetup
             try
             {
                 var parameter = Expression.Parameter(typeof(User), "p");
-                var property = Expression.Property(parameter, "Age");
-                var constant = Expression.Constant(20);
-                var greater = Expression.GreaterThan(property, constant);
+                var property = Expression.Property(parameter, "Cash");
+                var constant = Expression.Constant((int?)20);
+                var greater = Expression.GreaterThan(
+                    Expression.Coalesce(property,  Expression.Constant(int.MinValue)), constant);
                 var expressionBuilder = new ExpressionBuilder(new ExpressionData(greater, parameter));
-                var secondConstant = Expression.Constant(43);
-                var lesser = Expression.LessThan(property, secondConstant);
+                var secondConstant = Expression.Constant((int?)43);
+                var lesser = Expression.LessThan(Expression.Coalesce(property,  Expression.Constant(int.MinValue)),secondConstant);
                 expressionBuilder.ApplyAndAlso(new ExpressionData(lesser, parameter));
                 var andExpression = expressionBuilder.Build();
-                
                 
                 var test = context.Users.FirstOrDefault(
                     Expression.Lambda<Func<User, bool>>(andExpression.Expression, andExpression.Parameters));
