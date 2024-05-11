@@ -12,38 +12,72 @@ public static class SingeExpression<T>
         I valueToCompare)
     {
         ExpressionData? expressionData = null;
+        Expression? expression = null;
         var parameter = Expression.Parameter(typeof(User), parameterName);
         var property = Expression.Property(parameter, "Cash");
-        
-        if (typeof(I) == typeof(Nullable) || property is Nullable)
-        {
-            expressionData = GetBinaryExpressionNullable(
-                parameterName,
-                binaryOperator,
-                valueToCompare);
-        }
-
-        switch (expression)
-        {
-            
-        }
-        
-
         var constant = Expression.Constant(valueToCompare);
+        
+        switch (binaryOperator)
+        {
+            case BinaryOperator.Equal:
+                expression = Expression.Equal(property, constant);
+                break;
+            case BinaryOperator.NotEqual:
+                expression = Expression.Equal(property, constant);
+                break;
+            case BinaryOperator.Greater:
+                expression = Expression.Equal(property, constant);
+                break;
+            case BinaryOperator.GreaterOrEqual:
+                expression = Expression.Equal(property, constant);
+                break;
+            case BinaryOperator.Lesser:
+                expression = Expression.Equal(property, constant);
+                break;
+            case BinaryOperator.LesserOrEqual:
+                expression = Expression.Equal(property, constant);
+                break;
+        }
 
-        return expressionData;
+        return new ExpressionData(expression!, parameter);
     }
 
-    private static ExpressionData GetBinaryExpressionNullable<I>(
+    public static ExpressionData GetBinaryExpressionNullable<I>(
         string parameterName,
         BinaryOperator binaryOperator,
-        I? valuetoCompare)
+        I valuetoCompare,
+        I minValue)
     {
         ExpressionData? expressionData = null;
         var parameter = Expression.Parameter(typeof(User), parameterName);
-        var property = Expression.Property(parameter, "Cash");
+        var property = Expression.Coalesce(
+            Expression.Property(parameter, "Cash"),
+            Expression.Constant(minValue));
         var constant = Expression.Constant(valuetoCompare);
+        Expression? expression = null;
+        
+        switch (binaryOperator)
+        {
+            case BinaryOperator.Equal:
+                expression = Expression.Equal(property, constant);
+                break;
+            case BinaryOperator.NotEqual:
+                expression = Expression.Equal(property, constant);
+                break;
+            case BinaryOperator.Greater:
+                expression = Expression.Equal(property, constant);
+                break;
+            case BinaryOperator.GreaterOrEqual:
+                expression = Expression.Equal(property, constant);
+                break;
+            case BinaryOperator.Lesser:
+                expression = Expression.Equal(property, constant);
+                break;
+            case BinaryOperator.LesserOrEqual:
+                expression = Expression.Equal(property, constant);
+                break;
+        }
 
-        return expressionData;
+        return new ExpressionData(expression!, parameter);
     }
 }
