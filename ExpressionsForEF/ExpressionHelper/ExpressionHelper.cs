@@ -22,6 +22,12 @@ public static class ExpressionHelper<T>
         BinaryOperator binaryOperator,
         I valueToCompare)
     {
+        if (typeof(I) == typeof(string))
+        {
+            throw new Exception(
+                "String is not supported by this method please use method GetBinaryExpression with StringBinaryOperation");
+        }
+        
         ExpressionData? expressionData = null;
         Expression? expression = null;
         var parameter = Expression.Parameter(typeof(User), parameterName);
@@ -60,6 +66,12 @@ public static class ExpressionHelper<T>
         I valuetoCompare,
         I minValue)
     {
+        if (typeof(I) == typeof(string))
+        {
+            throw new Exception(
+                "String is not supported by this method please use method GetBinaryExpression with StringBinaryOperation");
+        }
+
         ExpressionData? expressionData = null;
         var parameter = Expression.Parameter(typeof(User), parameterName);
         var property = Expression.Coalesce(
