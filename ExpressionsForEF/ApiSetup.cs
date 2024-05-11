@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using ExpressionsForEF.DAL;
 using ExpressionsForEF.Entities;
 using ExpressionsForEF.ExpressionHelper;
+using ExpressionsForEF.ExpressionHelper.Enums;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpressionsForEF;
@@ -17,6 +18,11 @@ public static class ApiSetup
         {
             try
             {
+                var expression = ExpressionHelper<User>.GetBinaryExpression(
+                    "p",
+                    "Name",
+                    BinaryOperator.Greater,
+                    "Foo");
                 var parameter = Expression.Parameter(typeof(User), "p");
                 var property = Expression.Property(parameter, "Cash");
                 var constant = Expression.Constant((int?)20);
@@ -29,7 +35,7 @@ public static class ApiSetup
                 var andExpression = expressionBuilder.Build();
                 
                 var test = context.Users.FirstOrDefault(
-                    Expression.Lambda<Func<User, bool>>(andExpression.Expression, andExpression.Parameters));
+                    ExpressionHelper<User>.ToLambdaExpression(expression.Expression, expression.Parameter));
 
                 return Results.Ok(test);
             }

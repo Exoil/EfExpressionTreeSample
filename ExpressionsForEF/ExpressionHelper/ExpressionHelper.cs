@@ -15,15 +15,17 @@ public static class ExpressionHelper<T>
         Expression expression,
         IEnumerable<ParameterExpression> parameterExpression)
         => Expression.Lambda<Func<T, bool>>(expression, parameterExpression);
+
     public static ExpressionData GetBinaryExpression<I>(
         string parameterName,
+        string propertyName,
         BinaryOperator binaryOperator,
         I valueToCompare)
     {
         ExpressionData? expressionData = null;
         Expression? expression = null;
         var parameter = Expression.Parameter(typeof(User), parameterName);
-        var property = Expression.Property(parameter, "Cash");
+        var property = Expression.Property(parameter, propertyName);
         var constant = Expression.Constant(valueToCompare);
         
         switch (binaryOperator)
@@ -32,19 +34,19 @@ public static class ExpressionHelper<T>
                 expression = Expression.Equal(property, constant);
                 break;
             case BinaryOperator.NotEqual:
-                expression = Expression.Equal(property, constant);
+                expression = Expression.NotEqual(property, constant);
                 break;
             case BinaryOperator.Greater:
-                expression = Expression.Equal(property, constant);
+                expression = Expression.GreaterThan(property, constant);
                 break;
             case BinaryOperator.GreaterOrEqual:
-                expression = Expression.Equal(property, constant);
+                expression = Expression.GreaterThanOrEqual(property, constant);
                 break;
             case BinaryOperator.Lesser:
-                expression = Expression.Equal(property, constant);
+                expression = Expression.LessThan(property, constant);
                 break;
             case BinaryOperator.LesserOrEqual:
-                expression = Expression.Equal(property, constant);
+                expression = Expression.LessThanOrEqual(property, constant);
                 break;
         }
 
@@ -53,6 +55,7 @@ public static class ExpressionHelper<T>
 
     public static ExpressionData GetBinaryExpressionNullable<I>(
         string parameterName,
+        string propertyName,
         BinaryOperator binaryOperator,
         I valuetoCompare,
         I minValue)
@@ -60,7 +63,7 @@ public static class ExpressionHelper<T>
         ExpressionData? expressionData = null;
         var parameter = Expression.Parameter(typeof(User), parameterName);
         var property = Expression.Coalesce(
-            Expression.Property(parameter, "Cash"),
+            Expression.Property(parameter, propertyName),
             Expression.Constant(minValue));
         var constant = Expression.Constant(valuetoCompare);
         Expression? expression = null;
@@ -71,19 +74,46 @@ public static class ExpressionHelper<T>
                 expression = Expression.Equal(property, constant);
                 break;
             case BinaryOperator.NotEqual:
-                expression = Expression.Equal(property, constant);
+                expression = Expression.NotEqual(property, constant);
                 break;
             case BinaryOperator.Greater:
-                expression = Expression.Equal(property, constant);
+                expression = Expression.GreaterThan(property, constant);
                 break;
             case BinaryOperator.GreaterOrEqual:
-                expression = Expression.Equal(property, constant);
+                expression = Expression.GreaterThanOrEqual(property, constant);
                 break;
             case BinaryOperator.Lesser:
-                expression = Expression.Equal(property, constant);
+                expression = Expression.LessThan(property, constant);
                 break;
             case BinaryOperator.LesserOrEqual:
+                expression = Expression.LessThanOrEqual(property, constant);
+                break;
+        }
+
+        return new ExpressionData(expression!, parameter);
+    }
+
+    private static ExpressionData GetBinaryExpression(
+        string parameterName,
+        string propertyName,
+        StringBinaryOperators binaryOperator,
+        string valueToCompare)
+    {
+        ExpressionData? expressionData = null;
+        Expression? expression = null;
+        var parameter = Expression.Parameter(typeof(User), parameterName);
+        var property = Expression.Property(parameter, propertyName);
+        var constant = Expression.Constant(valueToCompare);
+        
+        switch (binaryOperator)
+        {
+            case StringBinaryOperators.Equal:
                 expression = Expression.Equal(property, constant);
+                break;
+            case StringBinaryOperators.NotEqual:
+                expression = Expression.NotEqual(property, constant);
+                break;
+            case StringBinaryOperators.Like:
                 break;
         }
 

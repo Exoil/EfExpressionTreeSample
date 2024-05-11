@@ -7,5 +7,5 @@ public enum BinaryOperator
     Greater = 3,
     GreaterOrEqual = 4,
     Lesser = 5,
-    LesserOrEqual = 6,
+    LesserOrEqual = 6
 }
